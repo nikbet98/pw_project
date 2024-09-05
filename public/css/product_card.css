@@ -1,0 +1,97 @@
+.card-product {
+    margin-bottom: 20px; /* Spacing between cards */
+    border-radius: 10px; /* Bordi arrotondati per le card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Leggera ombra */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 10px;
+    display: flex; 
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden; 
+    width: 300px;
+}
+
+/* Card image */
+.card-product .card-img-top {
+    height: 150px; /* Altezza fissa per l'immagine */
+    object-fit: cover; /* Coprire tutta l'area */
+    border-radius: 10px 10px 0 0; /* Bordi arrotondati per l'immagine */
+    overflow: hidden;
+}
+
+.card-product .card-body {
+    padding: 15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space between title and text */
+}
+
+/* Card title */
+.card-product .card-title {
+    font-weight: bold; /* Make title bold */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Mostra una sola riga per il titolo */
+    -webkit-box-orient: vertical;
+}
+
+/* Card text */
+.card-product .card-body .card-text {
+    font-size: 14px; /* Adjust font size as needed */
+    line-height: 1.5;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Mostra fino a tre righe per la descrizione */
+    -webkit-box-orient: vertical;
+}
+
+/* Footer settings */
+.card-product .card-footer {
+    background-color: #f8f9fa; /* Light background for footer */
+    /* Adjust padding as needed */
+    margin-top: auto; /* Push footer to the bottom */
+}
+
+.card-product:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+/* Button styles */
+
+.card-product .btn-primary {
+    background-color: #007bff; /* Blue button color */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Adjust button padding */
+    border-radius: 5px; /* Rounded button corners */
+    transition: background-color 0.2s, transform 0.2s; /* Hover effect */
+}
+
+.card-footer .btn{
+    height: 45px;
+    width: 65px;
+    display: inline-block; /* Or display: block; if you want them on separate lines */
+    margin: 0 5px;
+}
+
+.card-footer .d-flex { /* Target the flexbox container within the card footer */
+    align-items: center;
+}
+
+
+.card-product .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.card-stars{
+    padding: 15px;
+}

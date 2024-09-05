@@ -1,0 +1,9 @@
+.error {
+    color: red;
+    font-size: 0.8em;
+    display: none; /* Mostra solo in caso di errore */
+}
+
+input.invalid {
+    border-color: red;
+}

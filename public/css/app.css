@@ -1,0 +1,193 @@
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+
+.dark-mode {
+    background-color: #222;
+    color: #fff;
+}
+
+body > .row > div { /* Targets direct children of the .row element */
+    padding: 1.5rem; /* Adds 1.5rem padding to left, right, top, and bottom */
+}
+
+body > div { 
+    padding: 1.5rem;
+}
+.section {
+    margin-top: 15px;
+    margin-bottom: 15px; /* Adjust the padding value as needed */
+}
+
+
+.card_review {
+    margin-bottom: 15px; /* Add spacing between review cards */
+    border-radius: 10px; /* Round the corners of the card */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.card_review .card-body {
+    padding: 1.5rem; /* Adjust padding as needed */
+}
+
+
+
+.pagination {
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.pagination .page-item .page-link {
+    font-size: 14px; /* Adjust font size as needed */
+    padding: 8px 15px; /* Adjust padding as needed */
+    border-radius: 5px; /* Round the corners of the links */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff; /* Set the background color for the active link */
+    border-color: #007bff; /* Set the border color for the active link */
+}
+
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    font-size: 12px; /* Adjust font size as needed */
+    padding: 6px 10px; /* Adjust padding as needed */
+    border-radius: 5px; /* Round the corners of the links */
+}
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.breadcrumb-item {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: #ccc;
+}
+
+.navbar .breadcrumb {
+    display: flex;
+    align-items: center; 
+  }
+
+
+
+.brand-logo {
+    width: 100%; /* Assicura che il logo si adatti al contenitore */
+    height: auto; /* Mantiene le proporzioni dell'immagine */
+    border-radius: 8px; /* Angoli arrotondati per un aspetto più moderno */
+    transition: transform 0.3s ease-in-out; /* Transizione per effetto hover */
+    display: block; /* Rimuove spazi bianchi indesiderati sotto l'immagine */
+}
+
+/* Effetto hover per i loghi */
+.brand-logo:hover {
+    transform: scale(1.05); /* Leggero zoom al passaggio del mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra per effetto di sollevamento */
+}
+
+.row{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* search title */
+.search-title {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.search-title h4 {
+    color: #343a40;
+    font-weight: 600;
+    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0;
+}
+
+.search-title i {
+    color: #007bff;
+}
+
+.search-title:hover {
+    background-color: #e9ecef;
+    border-color: #ccc;
+}
+
+/* Se vuoi aggiungere un gradient background, sostituisci lo sfondo normale */
+.search-title-gradient {
+    background: linear-gradient(135deg, #6f42c1, #007bff);
+    border-radius: 5px;
+    color: #fff;
+}
+
+
+
+/* app.css */
+
+/* ... your existing styles ... */
+
+#custom-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: none;
+    /* Improved animation for a smoother appearance */
+    animation: fadeIn 0.3s ease-in-out; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 30px; /* Increased padding */
+    border-radius: 8px; /* Softer corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+    text-align: center; /* Center text content */
+}
+
+#popup-title {
+    color: #343a40; /* Darker title color */
+    margin-bottom: 15px;
+}
+
+#popup-message {
+    font-size: 1.1rem; /* Slightly larger font size */
+    margin-bottom: 20px;
+}
+
+#popup-close {
+
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.flag-icon {
+    width: 20px; 
+    height: 15px;
+    margin-right: 5px; 
+}
+

@@ -1,0 +1,37 @@
+.card-group-scroll {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent cards from wrapping */
+    overflow-y: hidden;
+    margin-bottom: 30px;
+}
+
+/* Pseudo-elemento per l'effetto di dissolvenza a sinistra */
+.card-group-scroll::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px; /* Larghezza della dissolvenza */
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none; /* Assicura che il mouse passi attraverso l'elemento */
+    z-index: 10;
+}
+
+/* Pseudo-elemento per l'effetto di dissolvenza a destra */
+.card-group-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px; /* Larghezza della dissolvenza */
+    height: 100%;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 10;
+}
+
+.card-group-scroll .card {
+    display: inline-block; /* Allow cards to be placed side by side */
+    margin-right: 10px; /* Add some spacing between cards */
+}

@@ -1,0 +1,60 @@
+.section {
+    margin-bottom: 20px;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.card_review {
+    margin-bottom: 10px;
+}
+
+.card_review .card-body {
+    padding: 15px;
+}
+
+.card_review .card-title {
+    font-weight: bold;
+}
+
+.card_review .card-text {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.card_review .card-text small {
+    font-size: 12px;
+}
+
