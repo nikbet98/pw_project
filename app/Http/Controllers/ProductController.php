@@ -107,5 +107,7 @@ class ProductController extends Controller
         return redirect()->route('product.show', $id)->with('success', 'Recensione aggiunta con successo!');
     }
 
+    
+
 }
 

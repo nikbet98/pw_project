@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cart', function (Blueprint $table) {
             $table->increments('id');
-            $table->float('total');
+            $table->float('total')->default(0);
             $table->integer('user_id')->unsigned();
 
             $table->foreign('user_id')

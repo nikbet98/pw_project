@@ -4,7 +4,8 @@
 <link rel="stylesheet" href="{{ asset('css/product.css') }}">
 <link rel="stylesheet" href="{{ asset('css/scrollable_list.css') }}">
 <link rel="stylesheet" href="{{ asset('css/product_card.css') }}">
-
+{{-- script --}}
+<script src="{{ asset('js/reviews_pagination.js') }}"></script>
 
 
 @section('active_products','active')
@@ -86,7 +87,7 @@
 @endcomponent
 
 <!-- product reviews -->
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-5 offset-md-3">
         <h2 class="text-center">{{__('messages.user_reviews')}}</h2>
         <div id="reviews-container">
@@ -101,6 +102,22 @@
             {{ $reviews->links() }}
         </div>
     </div>
-</div>
+</div> --}}
 
+<div class="row">
+    <div class="col-md-5 offset-md-3">
+        <h2 class="text-center">{{__('messages.user_reviews')}}</h2>
+        <div id="reviews-container">
+            @foreach ($reviews as $review)
+                @component('components.review_card', [
+                    'review' => $review
+                    ])
+                @endcomponent
+            @endforeach
+        </div>
+        <div class="text-center mt-3" id="pagination-container">  
+            {{ $reviews->links() }}
+        </div>
+    </div>
+</div>
 @endsection

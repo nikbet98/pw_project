@@ -62,7 +62,7 @@ $(document).ready(function() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Get CSRF token
 
         $.ajax({
-            url: "{{ route('profile.wishlist.add') }}", // Your add to wishlist route
+            url: "/profile/wishlist/add", // Your add to wishlist route
             type: 'POST',
             data: {
                 _token: csrfToken,
