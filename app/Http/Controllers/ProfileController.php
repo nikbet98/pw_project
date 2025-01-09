@@ -12,8 +12,7 @@ use App\Models\DataLayer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
-
+use App\Models\ContactInfo;
 
 
 
@@ -24,6 +23,18 @@ class ProfileController extends Controller
     public function edit()
     {   
         $user = Auth::user();
+
+        // Verifica se l'utente ha già le contactInfo, se non le ha, inizializzale
+        if (!$user->contactInfo) {
+            $user->contactInfo()->create([
+                'phone_number' => '',
+                'address' => '',
+                'zipcode' => '',
+                'date_of_birth' => '2025-01-01',
+            ]);
+            $user->refresh(); // Ricarica l'utente per ottenere le nuove contactInfo
+        }
+        
         $contactInfo = $user->contactInfo;
         $dl = new DataLayer();
         $categories = $dl->listCategories();
@@ -40,31 +51,41 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         // Validazione dei dati
-        $validator = Validator::make($request->all(), [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'zipcode' => 'required|string|max:10',
-            'email' => 'required|string|email|max:255|unique:user,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'firstname' => 'required|string|max:255',
+        //     'lastname' => 'required|string|max:255',
+        //     'address' => 'required|string|max:255',
+        //     'zipcode' => 'required|string|max:10',
+        //     'phone_number' => 'nullable|string|max:20',
+        //     'email' => 'required|string|email|max:255|unique:user,email,' . $user->id,
+        //     'password' => 'nullable|string|min:8|confirmed',
+        //     'date_of_birth' => 'nullable|date',
+        // ]);
 
-        // Controlla se la validazione fallisce
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput(); 
-        }
+        // // Controlla se la validazione fallisce
+        // if ($validator->fails()) {
+        //     return redirect()->back()
+        //         ->withErrors($validator)
+        //         ->withInput(); 
+        // }
 
         // Aggiorna le informazioni dell'utente
         $contactInfo = $user->contactInfo();
         $user->firstname = $request->input('firstname');
         $user->lastname = $request->input('lastname');
-        $contactInfo->address = $request->input('address');
-        $contactInfo->zipcode = $request->input('zipcode');
         $user->email = $request->input('email');
 
-
+        // Aggiorna le informazioni di contatto
+        $contactInfo = $user->contactInfo;
+        if (!$contactInfo) {
+            $contactInfo = new ContactInfo();
+            $contactInfo->user_id = $user->id;
+        }
+        $contactInfo->address = $request->input('address');
+        $contactInfo->zipcode = $request->input('zipcode');
+        $contactInfo->date_of_birth = $request->input('date_of_birth');
+        $contactInfo->phone_number = $request->input('phone_number');
+        $contactInfo->save();
 
         // Aggiorna la password se è stata fornita
         if ($request->filled('password')) {

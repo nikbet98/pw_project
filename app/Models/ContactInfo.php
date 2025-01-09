@@ -19,6 +19,8 @@ class ContactInfo extends Model
         'zipcode', 
     ];
 
+    public $timestamps = false;
+
     public function user() : BelongsTo {
         return $this->belongsTo(User::class);
     }

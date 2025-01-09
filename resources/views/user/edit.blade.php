@@ -36,6 +36,14 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label for="date_of_birth">{{__('messages.date_of_birth')}}</label>
+                            <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" value="{{ old('date_of_birth', $contactInfo->date_of_birth) }}">
+                            @error('date_of_birth')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                 
                         <div class="form-group">
                             <label for="email">{{__('messages.email')}}</label>
