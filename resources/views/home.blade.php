@@ -53,22 +53,16 @@
 
 <div class="col-md-9 mx-auto">
     <h2 class="text-center mx-auto">{{ __('messages.partner')}}</h2>
-    <div class="row">
+    <div class="row justify-content-center align-items-center">
         <!-- Griglia dei loghi dei brand -->
         @foreach ($brands as $brand)
-            <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+            <div class="col-6 col-md-4 col-lg-2 mb-4 d-flex justify-content-center align-items-center">
                 <a href="#">
                     <img src="{{ $brand->image }}" alt="{{ $brand->name }}" class="img-fluid brand-logo">
                 </a>
             </div>
         @endforeach
     </div>
-</div>
-
-<div>
-    @foreach ($categories as $category)
-        <p>{{$category->name}}</p>
-    @endforeach
 </div>
 
 @endsection

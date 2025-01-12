@@ -103,9 +103,7 @@
             </div>
         </div>
     </div>
-    <div id='pippo'>
-        
-    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">

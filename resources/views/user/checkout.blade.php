@@ -1,6 +1,9 @@
 @extends('layout.master')
 
 <link rel="stylesheet" href="{{ asset('css/input_error.css') }}">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('home') }}">{{__('messages.home_section')}}</a></li>
@@ -97,6 +100,11 @@
     </form>
 </div>
 
+<div id="custom-popup" style="display:none;">
+    <h2 id="popup-title"></h2>
+    <p id="popup-message"></p>
+</div>
+
 <script>
     // Function to show your custom popup
     function showCustomPopup(type, message) {
@@ -105,54 +113,52 @@
         var popupMessage = popup.querySelector('#popup-message');
 
         if (type === 'success') {
-            popupTitle.textContent = popup.dataset.success;
-            popupMessage.textContent = popup.dataset.successMessage;
+            popupTitle.textContent = 'Success';
+            popupMessage.textContent = message;
         } else {
-            popupTitle.textContent = popup.dataset.error;
-            popupMessage.textContent = popup.dataset.errorMessage;
+            popupTitle.textContent = 'Error';
+            popupMessage.textContent = message;
         }
 
-    popup.style.display = 'block';
-    }
-
-    // Function to close the popup (if needed)
-    function closeCustomPopup() {
-        document.getElementById('custom-popup').style.display = 'none';
+        popup.style.display = 'block';
     }
 
     // Handle form submission
     document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         fetch(this.action, {
             method: this.method,
             body: new FormData(this),
             headers: {
-                'X-Requested-With': 'XMLHttpRequest' 
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
         .then(response => {
-            if (response.ok) {
-                return response.json(); 
-            } else {
-                throw new Error('An error occurred during checkout.');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            return response.json();
         })
         .then(data => {
+            console.log('Success:', data); // Log the response data for debugging
             if (data.success) {
-                // Show your custom popup
-                showCustomPopup('success');
+                // Show success popup
+                showCustomPopup('success', 'Checkout completed successfully.');
 
                 // Redirect after a delay (e.g., 3 seconds)
                 setTimeout(function() {
-                    window.location.href = '{{ route('profile') }}'; 
-                }, 3000); 
+                    window.location.href = data.redirect;
+                }, 3000);
             } else {
+                // Show error popup
                 showCustomPopup('error', data.message);
             }
         })
         .catch(error => {
-
+            console.error('Error:', error); // Log the error for debugging
+            // Show error popup
+            showCustomPopup('error', 'An error occurred during checkout.');
         });
     });
 </script>

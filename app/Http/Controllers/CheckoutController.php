@@ -33,13 +33,13 @@ class CheckoutController extends Controller
     public function processPayment(Request $request)
     {
         // 1. Validate the form data (shipping address, payment details, etc.)
-        $validatedData = $request->validate([
-            'shipping_address' => 'required|string|max:255', // Address validation
-            'credit_card_number' => 'required|string|size:16', // Basic credit card number (16 digits)
-            'expiry_month' => 'required|integer|min:1|max:12', // Expiry month
-            'expiry_year' => 'required|integer|min:' . date('Y'), // Expiry year (must be current year or later)
-            'cvv' => 'required|string|size:3', // CVV (3 digits)
-        ]);
+        // $validatedData = $request->validate([
+        //     'shipping_address' => 'required|string|max:255', // Address validation
+        //     'credit_card_number' => 'required|string|size:16', // Basic credit card number (16 digits)
+        //     'expiry_month' => 'required|integer|min:1|max:12', // Expiry month
+        //     'expiry_year' => 'required|integer|min:' . date('Y'), // Expiry year (must be current year or later)
+        //     'cvv' => 'required|string|size:3', // CVV (3 digits)
+        // ]);
 
 
         $order = Order::create([
@@ -64,7 +64,10 @@ class CheckoutController extends Controller
 
         $cart->products()->detach();
     
-        return response()->json(['success' => true, 'redirect' => route('profile')]);
+        return response()->json([
+            'success' => true, 
+            'redirect' => route('profile')
+        ]);
 
     }
 }

@@ -21,7 +21,7 @@
                     <ul class="list-group">
                         <li class="list-group-item"><a href="{{ route("profile.orders") }} ">{{__('messages.my_orders')}}</a></li>
                         <li class="list-group-item"><a href="{{ route("profile.wishlist") }}">{{__('messages.my_wishlist')}}</a></li>
-                        <li class="list-group-item"><a href="{{ route("profile.reviews") }}">{{__('messages.my_review')}}</a></li> 
+                        <li class="list-group-item"><a href="{{ route("profile.reviews") }}">{{__('messages.my_reviews')}}</a></li> 
                         <li class="list-group-item"><a href="{{ route("profile.edit") }}">{{__('messages.account_settings')}}</a></li>
                         <li class="list-group-item">
                             <form action="{{ route('logout') }}" method="POST">

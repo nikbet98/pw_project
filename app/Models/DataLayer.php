@@ -153,8 +153,11 @@ class DataLayer
 
 
     public function productReviews($id){
-        $product = Product::findOrFail($id);
-        $reviews = $product->reviews()->orderBy('created_at', 'desc')->paginate(5);
+        // $product = Product::findOrFail($id);
+        // $reviews = $product->reviews()->orderBy('created_at', 'desc')->paginate(5);
+        // return $reviews;
+
+        $reviews = Review::where('product_id', $id)->orderBy('created_at', 'desc')->paginate(5);
         return $reviews;
     }
 
@@ -319,6 +322,17 @@ class DataLayer
         }
 
         return $query->get()->toArray();
+    }
+
+    public function getYearlySalesData(): array
+    {
+        return Order::selectRaw('YEAR(date) as year, MONTH(date) as month, SUM(total) as total_sales')
+            ->where('date', '>=', Carbon::now()->subMonths(12))
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get()
+            ->toArray();
     }
 }
 

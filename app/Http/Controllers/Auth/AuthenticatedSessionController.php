@@ -23,7 +23,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        $dl = new DataLayer();
+        $categories = $dl->listCategories();
+        return view('auth.login')->with('categories', $categories);
     }
 
     /**

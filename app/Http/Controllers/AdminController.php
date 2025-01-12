@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function index() {
         $user = Auth::user();
         $dl = new DataLayer();
-        $monthlySales = $dl->getMonthlySalesData();
+        $monthlySales = $dl->getYearlySalesData();
         $totalUsers = $dl->userCount();
         return view('admin.home')->with('user', $user)
                                  ->with('totalUsers', $totalUsers)
