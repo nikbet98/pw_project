@@ -182,9 +182,9 @@ class ProfileController extends Controller
 
         // Assuming your DataLayer has a method to remove from wishlist
         if ($dl->removeFromWishlist($userId, $productId)) {
-            return back()->with('success', 'Product removed from wishlist!');
+            return response()->json(['success' => true, 'message' => 'Product removed from wishlist!']);
         } else {
-            return back()->with('error', 'Failed to remove product from wishlist.');
+            return response()->json(['success' => false, 'message' => 'Failed to remove product from wishlist.']);
         }
     }
 

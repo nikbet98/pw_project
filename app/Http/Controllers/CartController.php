@@ -7,6 +7,7 @@ use App\Models\SessionCart;
 use App\Models\DataLayer;
 use App\Helpers\Helpers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Promotion;
 
 
 
@@ -56,21 +57,36 @@ class CartController extends Controller
         }
         $this->cart->add($productId, 1, $discountedPrice);
 
-        return response()->json(['cart_count' => $this->cart->count()]); 
+        return response()->json(['cart_count' => $this->cart->count(), 'success' => true]); 
     }
 
     public function remove($productId) {
 
         $this->cart->remove($productId);
+        $totalCartCost = $this->cart->getTotalCost();
 
-        return redirect()->route('cart')->with('success', 'Prodotto rimosso dal carrello!');
+        // return redirect()->route('cart')->with('success', 'Prodotto rimosso dal carrello!');
+        return response()->json([
+            'success' => true,
+            'totalCartCost' => $totalCartCost
+        ]);
     }
 
     public function update(Request $request, $productId)
     {
+        
         $this->cart->update($productId, $request->input('quantity'));
+        
+        $itemTotal = $this->getItemTotal($productId);
+        $totalCartCost = $this->cart->getTotalCost();
 
-        return redirect()->route('cart')->with('success', 'Quantità aggiornata!');
+
+        return response()->json([
+            'success' => true,
+            'itemTotal' => $itemTotal,
+            'totalCartCost' => $totalCartCost
+        ]);
+        
     }
 
     public function clear()
@@ -85,7 +101,7 @@ class CartController extends Controller
             }
         }
 
-        return redirect()->route('cart')->with('success', 'Carrello svuotato!');
+        return response()->json(['success' => true]);
     }
 
     public function count(){
@@ -98,7 +114,7 @@ class CartController extends Controller
         $totalCount = 0;
 
         // 1. Get Session Cart Count
-        $totalCount += $this->cart->count(); // Assuming your SessionCart has a count() method
+        $totalCount += $this->cart->count();
 
         // 2. Get Database Cart Count (if user is logged in)
         if (Auth::check()) {
@@ -110,5 +126,42 @@ class CartController extends Controller
         }
 
         return response()->json(['cart_count' => $totalCount]);
+    }
+
+    // Calculate the total cost for a specific item
+    private function getItemTotal($cartItem)
+    {
+        $quantity = 0;
+        if (Auth::check()) {
+            $dl = new DataLayer();
+            $cart = $dl->userCart(Auth::user()->id);
+            $quantity = $cart->products()->where('product_id', $cartItem)->first()->pivot->quantity;
+        } else {
+            $quantity = $this->cart->getItemQuantity($cartItem);
+        }
+
+        // Retrieve the product price
+        $product = Product::find($cartItem);
+        $price = $product->price;
+
+        // Get the discount percentage using DataLayer
+        $dl = new DataLayer();
+        $discountPercentage = $dl->getProductDiscount($cartItem);
+
+        if ($discountPercentage > 0) {
+            $price = $price - ($price * ($discountPercentage / 100));
+        }
+
+        return $price * $quantity;
+    }
+
+    // Calculate the total cost for the entire cart
+    private function getTotalCartCost($cart)
+    {
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $this->getItemTotal($item);
+        }
+        return $total;
     }
 }

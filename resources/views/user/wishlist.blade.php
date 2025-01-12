@@ -24,7 +24,7 @@
             </thead>
             <tbody>
                 @foreach ($wishlist->products as $product)
-                    <tr>
+                    <tr data-product-id="{{ $product->id }}">
                         <td>
                             <a href="{{ route('product.show', $product->id) }}">
                                 <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid" style="max-width: 50px;">
@@ -37,21 +37,12 @@
                             €{{ number_format($product->price, 2) }}
                         </td>
                         <td>
-                            <form action="{{ route('profile.wishlist.remove', $product->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">{{__('messages.remove')}}</button>
-                            </form>
+                            <button class="btn btn-sm btn-danger remove-from-wishlist">{{__('messages.remove')}}</button>
                         </td>
                         <td>
-                            <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToTheCartBtn">
-                                @csrf
-                                <input type="text" id="product_id" value="{{ $product->id }}" style="display: none;">
-                                <input type="text" id="quantity" value="1" style="display: none;">
-                                <button type="submit" class="btn btn-primary mx-4">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
-                            </form>
+                            <button class="btn btn-primary add-to-cart">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -61,4 +52,63 @@
         <p>{{__('messages.wishlist_empty')}}.</p>
     @endif
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remove item from wishlist
+        document.querySelectorAll('.remove-from-wishlist').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const productId = row.dataset.productId;
+
+                fetch(`/profile/wishlist/remove/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        row.remove();
+                    }
+                });
+            });
+        });
+
+        // Add item to cart
+        $('.add-to-cart').on('click', function() {
+            var row = $(this).closest('tr');
+            var productId = row.data('product-id');
+
+            $.ajax({
+                url: `/cart/add/${productId}`,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: {
+                    product_id: productId,
+                    quantity: 1
+                },
+                success: function(response) {
+                    if (response.success) {
+                        row.remove();
+                        updateCartCounter();
+                    }
+                }
+            });
+        });
+
+        // Function to update cart counter
+        function updateCartCounter() {
+            fetch('{{ route('cart.total-count') }}')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cart-counter').textContent = data.cart_count;
+                });
+        }
+    });
+</script>
 @endsection

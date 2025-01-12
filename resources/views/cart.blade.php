@@ -22,45 +22,37 @@
                     <th>{{__('messages.action')}}</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="cart-items">
                 @foreach($products as $product)
-                    <tr>
+                    <tr data-product-id="{{ $product->id }}">
                         <td>
                             <a href="{{ route('product.show', $product->id)}}">
                                 <img src="{{ $product->image }}" alt="{{ $product->name }}" class="img-fluid" style="max-width: 50px;"> 
                             </a>
                         </td>
+                        <td>{{ $product->name }}</td>
                         <td>
-                            {{ $product->name }} 
-                        </td>
-                        <td>
-                            <form action="{{ route('cart.update', $product->id) }}" method="POST">
-                                @csrf
-                                <input type="number" name="quantity" value="{{ $cartItems[$product->id]['quantity'] }}" min="1">
-                                <button type="submit" class="btn btn-sm btn-primary">{{__('messages.update')}}</button>
-                            </form>
+                            <div class="d-flex align-items-center">
+                                <input type="number" name="quantity" value="{{ $cartItems[$product->id]['quantity'] }}" min="1" class="form-control quantity-input mr-2">
+                                <button class="btn btn-sm btn-primary update-quantity">{{__('messages.update')}}</button>
+                            </div>
                         </td>
                         <td>
                             @if(isset($cartItems[$product->id]['discountedPrice'])) 
-                                {{-- Display discounted price if available --}}
                                 {{ $cartItems[$product->id]['discountedPrice'] }} 
                             @else
                                 {{ $product->price }} 
                             @endif
                         </td>
-                        <td>
+                        <td class="item-total">
                             @if(isset($cartItems[$product->id]['discountedPrice']))
-                                {{-- Calculate total using discounted price --}}
                                 {{ $cartItems[$product->id]['discountedPrice'] * $cartItems[$product->id]['quantity'] }}
                             @else
                                 {{ $product->price * $cartItems[$product->id]['quantity'] }}
                             @endif
                         </td>
                         <td>
-                            <form action="{{ route('cart.remove', $product->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger">{{__('messages.remove')}}</button>
-                            </form>
+                            <button class="btn btn-sm btn-danger remove-item">{{__('messages.remove')}}</button>
                         </td>
                     </tr>
                 @endforeach
@@ -68,15 +60,11 @@
         </table>
         {{-- Total Cost --}}
         <div class="d-flex justify-content-end mt-3"> 
-            <strong>Totale Carrello: {{ $totalCartCost }}</strong> 
+            <strong id="total-cart-cost">Totale Carrello: {{ $totalCartCost }}</strong> 
         </div>
         
         <div class="d-flex justify-content-end mt-3">
-            <form action="{{ route('cart.clear') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger mr-2">{{__('messages.clear_cart')}}</button>
-            </form>
-
+            <button class="btn btn-danger mr-2 clear-cart">{{__('messages.clear_cart')}}</button>
             {{-- Proceed to Checkout Button --}}
             <a href="{{ route('checkout.index')}}" class="btn btn-success">{{__('messages.checkout')}}</a> 
         </div>
@@ -85,4 +73,86 @@
         <p>{{__('messages.cart_empty')}}.</p>
     @endif
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to update cart counter
+        function updateCartCounter() {
+            fetch('{{ route('cart.total-count') }}')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cart-counter').textContent = data.cart_count;
+                });
+        }
+
+        // Update quantity
+        document.querySelectorAll('.update-quantity').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const productId = row.dataset.productId;
+                const quantity = row.querySelector('.quantity-input').value;
+
+                fetch(`/cart/update/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ quantity: quantity })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        row.querySelector('.item-total').textContent = data.itemTotal;
+                        document.getElementById('total-cart-cost').textContent = `Totale Carrello: ${data.totalCartCost}`;
+                        updateCartCounter();
+                    }
+                });
+            });
+        });
+
+        // Remove item
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const productId = row.dataset.productId;
+
+                fetch(`{{ url('cart/remove') }}/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        row.remove();
+                        document.getElementById('total-cart-cost').textContent = `Totale Carrello: ${data.totalCartCost}`;
+                        updateCartCounter();
+                    }
+                });
+            });
+        });
+
+        // Clear cart
+        document.querySelector('.clear-cart').addEventListener('click', function() {
+            fetch(`{{ url('cart/clear') }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('cart-items').innerHTML = '';
+                    document.getElementById('total-cart-cost').textContent = `Totale Carrello: 0`;
+                    updateCartCounter();
+                }
+            });
+        });
+    });
+</script>
 @endsection

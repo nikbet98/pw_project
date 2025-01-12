@@ -116,3 +116,11 @@ p {
         flex-direction: column;
     }
 }
+.quantity-input {
+    width: 60px;
+    margin-right: 10px;
+}
+
+.d-flex.align-items-center {
+    justify-content: center;
+}

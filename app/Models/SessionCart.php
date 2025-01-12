@@ -151,6 +151,10 @@ class SessionCart
         return $totalQuantity;
     }
 
+    public function getItemQuantity($productId){
+        return $this->items[$productId]['quantity'];
+    }
+
     public function getTotalCost() {
         
         $totalCost = 0;
